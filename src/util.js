@@ -9,7 +9,7 @@ export default {
     if(order == Const.SORT_ASC) wrap.className += " dropup";
     var inner = document.createElement("span");
     inner.className = "caret";
-    inner.style.margin = "10px 5px";
+    inner.style.margin = "0 0 0 5px";
     wrap.appendChild(inner);
     return wrap;
   },
@@ -20,7 +20,7 @@ export default {
     });
     return (
       <span className={orderClass}>
-        <span className="caret" style={{margin: '10px 5px'}}></span>
+        <span className="caret" style={{margin: '0 0 0 5px'}}></span>
       </span>
     );
   },
