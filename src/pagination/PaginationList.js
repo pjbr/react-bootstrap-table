@@ -66,8 +66,12 @@ class PaginationList extends React.Component {
   render() {
     this.totalPages = Math.ceil(this.props.dataSize / this.state.sizePerPage);
     var pageBtns = this.makePage();
+    // var pageListStyle = {
+    //   float: "right",
+    //   marginTop: "0px"  //override the margin-top defined in .pagination class in bootstrap.
+    // }
+
     var pageListStyle = {
-      float: "right",
       marginTop: "0px"  //override the margin-top defined in .pagination class in bootstrap.
     }
 
@@ -82,31 +86,40 @@ class PaginationList extends React.Component {
     return (
       <div className="row" style={{ marginTop: 15 }}>
         <div className="col-md-6">
-        {
-          this.props.sizePerPageList.length > 1 ?
-          <div className="dropdown">
-            <button className="btn btn-default dropdown-toggle" type="button" id="pageDropDown" data-toggle="dropdown"
-                    aria-expanded="true">
-              {this.state.sizePerPage}
-              <span>
-                {" "}
-                <span className="caret"/>
-              </span>
-            </button>
-            <ul className="dropdown-menu" role="menu" aria-labelledby="pageDropDown">
-              {sizePerPageList}
-            </ul>
-          </div>
-          : ""
-        }
-        </div>
-        <div className="col-md-6">
           <ul className="pagination" style={pageListStyle}>
             {pageBtns}
           </ul>
         </div>
       </div>
     )
+    // return (
+    //   <div className="row" style={{ marginTop: 15 }}>
+    //     <div className="col-md-6">
+    //     {
+    //       this.props.sizePerPageList.length > 1 ?
+    //       <div className="dropdown">
+    //         <button className="btn btn-default dropdown-toggle" type="button" id="pageDropDown" data-toggle="dropdown"
+    //                 aria-expanded="true">
+    //           {this.state.sizePerPage}
+    //           <span>
+    //             {" "}
+    //             <span className="caret"/>
+    //           </span>
+    //         </button>
+    //         <ul className="dropdown-menu" role="menu" aria-labelledby="pageDropDown">
+    //           {sizePerPageList}
+    //         </ul>
+    //       </div>
+    //       : ""
+    //     }
+    //     </div>
+    //     <div className="col-md-6">
+    //       <ul className="pagination" style={pageListStyle}>
+    //         {pageBtns}
+    //       </ul>
+    //     </div>
+    //   </div>
+    // )
   }
 
   makePage() {
