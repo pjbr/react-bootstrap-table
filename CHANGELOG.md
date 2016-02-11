@@ -1,6 +1,62 @@
+<a name="v1.5.0"></a>
+# [v1.5.0](https://github.com/AllenFang/react-bootstrap-table/compare/v1.4.6...v1.5.0) (2016-02-05)
+### Bug fixes
+* Fix variable reference issue for default selected([13f736c](https://github.com/AllenFang/react-bootstrap-table/commit/13f736c4c38066f1c6030a1e45e7557826fb029c))
+
+### Features
+* Support column formatting with extra data([9de2e9e](https://github.com/AllenFang/react-bootstrap-table/commit/9de2e9ed90c8c0601a579f203570e2251b70728d))
+	* Check [this](https://github.com/AllenFang/react-bootstrap-table/blob/79bc278924fffe492ab05e8f94b2ec9b7f4ada8b/examples/js/column-format/extra-data-column-format-table.js) examples
+* Change the pagination behavior([74c1fc7](https://github.com/AllenFang/react-bootstrap-table/commit/74c1fc7ed8c6cf2f2d46033bd8f8416436bfb895))
+	* Check this [PR](https://github.com/AllenFang/react-bootstrap-table/pull/256) for more detail
+
+### Enhancement
+* Show sorting caret on header if sort enabled([55ac719](https://github.com/AllenFang/react-bootstrap-table/commit/55ac719981bfd30708059f218b33431e4650bc2a))
+
+
+<a name="v1.4.6"></a>
+# [v1.4.6](https://github.com/AllenFang/react-bootstrap-table/compare/v1.4.5...v1.4.6) (2016-01-30)
+### Features
+* Support column format with extra data([a4e4565](https://github.com/AllenFang/react-bootstrap-table/commit/a4e4565a872a5f188d117b5fc01e767b4d0e03ef))
+	* Add ```formatExtraData``` in ```TableHeaderColumn```. Check the example in ```examples/js/column-format/extra-data-column-format-table.js```
+* Add Clear button for cleaning search input field([8d41dc5](https://github.com/AllenFang/react-bootstrap-table/commit/8d41dc546ca327c8108edfc2f340ac05bb85615f))
+	* add  ```clearSearch``` on ```options``` props
+	```js
+	var options = {
+		clearSearch: true
+	};
+	//...
+	ReactDOM.render(
+		<BootstrapTable data={collection} options={options}>...
+	);
+	```
+
+### Enhancement
+* Available to clean all selection state By API([f5978f9](https://github.com/AllenFang/react-bootstrap-table/commit/f5978f95c1e8229562483c3b55ca649b8b4bcde5))
+	* Check this [thread](https://github.com/AllenFang/react-bootstrap-table/issues/244)
+
+<a name="v1.4.5"></a>
+# [v1.4.5](https://github.com/AllenFang/react-bootstrap-table/compare/v1.4.4...v1.4.5) (2016-01-25)
+### Bug fixes
+* Fix pagination lost([6fe1812](https://github.com/AllenFang/react-bootstrap-table/commit/6fe1812ed27b33c5841e7dd25b991bd1cfde9ee0))
+	check example in ```examples/js/selection/externally-managed-selection.js```
+* Fix [#213](https://github.com/AllenFang/react-bootstrap-table/issues/213)([c004c90](https://github.com/AllenFang/react-bootstrap-table/commit/c004c9066644decae9d0819323821c6b742abe94))
+
+### Features
+* Add class on select all checkbox([b955d92](https://github.com/AllenFang/react-bootstrap-table/commit/b955d922df8d48506361c0d31c5f210657c7152c))
+
+### Enhancement
+* Support source map([d0d78ef](https://github.com/AllenFang/react-bootstrap-table/commit/d0d78ef32e97abb675ca0044f93ea93b26f04008))
+* Sorting data provided in data in-place rather than using a copy or some other heuristic([3157dbe](https://github.com/AllenFang/react-bootstrap-table/commit/3157dbe44cc4681233d7ca86b8f8987ea886579f))
+
+<a name="v1.4.4"></a>
+# [v1.4.4](https://github.com/AllenFang/react-bootstrap-table/compare/v1.4.3...v1.4.4) (2016-01-21)
+### Bug fixes
+* Sorting not re-rendering data when dataFormat is being used([7810fa3](https://github.com/AllenFang/react-bootstrap-table/commit/7810fa338b9a8e7475b9d1a0026c5661fd7db988))
+* Table should be sortable when a column is hidden programmatically([1c403b1](https://github.com/AllenFang/react-bootstrap-table/commit/1c403b17ff2e47af18ce42856103209c5a5dea56))
+
 <a name="v1.4.3"></a>
 # [v1.4.3](https://github.com/AllenFang/react-bootstrap-table/compare/v1.4.2...v1.4.3) (2016-01-20)
-### Bud fixes
+### Bug fixes
 * Row end with a superfluous comma when export csv([078d91d](https://github.com/AllenFang/react-bootstrap-table/commit/078d91dcc3169a221468aca0647ff0978988e271))
 * Apply a dataFormat column will breaks when hiding([6878e90](https://github.com/AllenFang/react-bootstrap-table/commit/6878e90f8a9ea179384f9c6363994715d0693d1a))
 * Setting default sort and then sorting first time always sort descending([ab43542](https://github.com/AllenFang/react-bootstrap-table/commit/ab43542c8beb0ca41f755fcf495009ab03456a22))

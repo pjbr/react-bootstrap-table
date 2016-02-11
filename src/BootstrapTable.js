@@ -26,13 +26,15 @@ class BootstrapTable extends React.Component {
         })
       });
     } else {
-      this.store = new TableDataStore(this.props.data);
+      let copy = this.props.data.slice();
+      this.store = new TableDataStore(copy);
     }
 
     this.initTable(this.props);
 
     if (this.props.selectRow && this.props.selectRow.selected) {
-      this.store.setSelectedRowKey(this.props.selectRow.selected);
+      let copy = this.props.selectRow.selected.slice();
+      this.store.setSelectedRowKey(copy);
     }
 
     this.state = {
@@ -102,6 +104,7 @@ class BootstrapTable extends React.Component {
         align: column.props.dataAlign,
         sort: column.props.dataSort,
         format: column.props.dataFormat,
+        formatExtraData: column.props.formatExtraData,
         filterFormatted: column.props.filterFormatted,
         editable: column.props.editable,
         hidden: column.props.hidden,
@@ -117,12 +120,10 @@ class BootstrapTable extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.initTable(nextProps);
     if (Array.isArray(nextProps.data)) {
-      this.store.setData(nextProps.data);
+      this.store.setData(nextProps.data.slice());
       let paginationDom = this.refs.pagination;
-      let page = nextProps.options.page ||
-                  (paginationDom ? paginationDom.getCurrentPage() : 1);
-      let sizePerPage = nextProps.options.sizePerPage ||
-                  (paginationDom ? paginationDom.getSizePerPage() : Const.SIZE_PER_PAGE_LIST[0]);
+      let page = paginationDom && paginationDom.getCurrentPage() || nextProps.options.page || 1;
+      let sizePerPage = paginationDom && paginationDom.getSizePerPage() || nextProps.options.sizePerPage || Const.SIZE_PER_PAGE_LIST[0];
       // #125
       if(page > Math.ceil(nextProps.data.length / sizePerPage)) page = 1;
       let sortInfo = this.store.getSortInfo();
@@ -136,9 +137,10 @@ class BootstrapTable extends React.Component {
     }
     if (nextProps.selectRow && nextProps.selectRow.selected) {
       //set default select rows to store.
-      this.store.setSelectedRowKey(nextProps.selectRow.selected);
+      let copy = nextProps.selectRow.selected.slice();
+      this.store.setSelectedRowKey(copy);
       this.setState({
-        selectedRowKeys: nextProps.selectRow.selected
+        selectedRowKeys: copy
       });
     }
   }
@@ -248,6 +250,13 @@ class BootstrapTable extends React.Component {
     } else {
       return true;
     }
+  }
+
+  cleanSelected() {
+    this.store.setSelectedRowKey([]);
+    this.setState({
+      selectedRowKeys: []
+    });
   }
 
   handleSort(order, sortField) {
@@ -527,6 +536,10 @@ class BootstrapTable extends React.Component {
             remote={this.isRemoteDataSource()}
             dataSize={dataSize}
             onSizePerPageList={this.props.options.onSizePerPageList}
+            prePage={this.props.options.prePage || Const.PRE_PAGE}
+            nextPage={this.props.options.nextPage || Const.NEXT_PAGE}
+            firstPage={this.props.options.firstPage || Const.FIRST_PAGE}
+            lastPage={this.props.options.lastPage || Const.LAST_PAGE}
           />
         </div>
       );
@@ -550,9 +563,11 @@ class BootstrapTable extends React.Component {
             field: props.dataField,
             //when you want same auto generate value and not allow edit, example ID field
             autoValue: props.autoValue || false,
-            //for create eidtor, no params for column.editable() indicate that editor for new row
+            //for create editor, no params for column.editable() indicate that editor for new row
             editable: props.editable && (typeof props.editable === "function") ? props.editable() : props.editable,
-            format: props.format ? format : false
+            format: props.dataFormat ? function(value){
+              return props.dataFormat(value, null, props.formatExtraData).replace(/<.*?>/g,'');
+            } : false
           };
         });
       } else {
@@ -565,6 +580,7 @@ class BootstrapTable extends React.Component {
       return (
         <div className="tool-bar">
           <ToolBar
+            clearSearch={this.props.options.clearSearch}
             enableInsert={this.props.insertRow}
             enableDelete={this.props.deleteRow}
             enableSearch={this.props.search}
@@ -648,6 +664,7 @@ BootstrapTable.propTypes = {
   columnFilter: React.PropTypes.bool,
   trClassName: React.PropTypes.any,
   options: React.PropTypes.shape({
+    clearSearch: React.PropTypes.bool,
     sortName: React.PropTypes.string,
     sortOrder: React.PropTypes.string,
     afterTableComplete: React.PropTypes.func,
@@ -664,7 +681,11 @@ BootstrapTable.propTypes = {
     onPageChange: React.PropTypes.func,
     onSizePerPageList: React.PropTypes.func,
     noDataText: React.PropTypes.string,
-    handleConfirmDeleteRow: React.PropTypes.func
+    handleConfirmDeleteRow: React.PropTypes.func,
+    prePage: React.PropTypes.string,
+    nextPage: React.PropTypes.string,
+    firstPage: React.PropTypes.string,
+    lastPage: React.PropTypes.string
   }),
   fetchInfo: React.PropTypes.shape({
     dataTotalSize: React.PropTypes.number,
@@ -704,6 +725,7 @@ BootstrapTable.defaultProps = {
   columnFilter: false,
   trClassName: '',
   options: {
+    clearSearch: false,
     sortName: undefined,
     sortOrder: undefined,
     afterTableComplete: undefined,
@@ -718,7 +740,11 @@ BootstrapTable.defaultProps = {
     paginationSize: Const.PAGINATION_SIZE,
     onSizePerPageList: undefined,
     noDataText: undefined,
-    handleConfirmDeleteRow: undefined
+    handleConfirmDeleteRow: undefined,
+    prePage: Const.PRE_PAGE,
+    nextPage: Const.NEXT_PAGE,
+    firstPage: Const.FIRST_PAGE,
+    lastPage: Const.LAST_PAGE
   },
   fetchInfo: {
     dataTotalSize: 0,
