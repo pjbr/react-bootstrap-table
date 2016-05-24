@@ -1,43 +1,85 @@
-import React from 'react';
-import Const from './Const';
+import React, { Component, PropTypes } from 'react';
 
-class TableRow extends React.Component{
+class TableRow extends Component {
 
-  rowClick(e){
-    if(e.target.tagName !== "INPUT") {
-      if (this.props.selectRow && this.props.selectRow.clickToSelect) this.props.onSelectRow(e.currentTarget.rowIndex, !this.props.isSelected);
-      if (this.props.onRowClick) this.props.onRowClick(e.currentTarget.rowIndex);
+  constructor(props) {
+    super(props);
+    this.clickNum = 0;
+  }
+
+  rowClick = e => {
+    if (e.target.tagName !== 'INPUT' &&
+        e.target.tagName !== 'SELECT' &&
+        e.target.tagName !== 'TEXTAREA') {
+      const rowIndex = e.currentTarget.rowIndex + 1;
+      if (this.props.selectRow) {
+        if (this.props.selectRow.clickToSelect) {
+          this.props.onSelectRow(rowIndex, !this.props.isSelected, e);
+        } else if (this.props.selectRow.clickToSelectAndEditCell) {
+          this.clickNum++;
+          /** if clickToSelectAndEditCell is enabled,
+           *  there should be a delay to prevent a selection changed when
+           *  user dblick to edit cell on same row but different cell
+          **/
+          setTimeout(() => {
+            if (this.clickNum === 1) {
+              this.props.onSelectRow(rowIndex, !this.props.isSelected, e);
+            }
+            this.clickNum = 0;
+          }, 200);
+        }
+      }
+      if (this.props.onRowClick) this.props.onRowClick(rowIndex);
     }
   }
 
-  render(){
+  rowMouseOut = e => {
+    if (this.props.onRowMouseOut) {
+      this.props.onRowMouseOut(e.currentTarget.rowIndex, e);
+    }
+  }
 
-    var trCss={
-      style:{
-        backgroundColor: this.props.isSelected?this.props.selectRow.bgColor:null
+  rowMouseOver = e => {
+    if (this.props.onRowMouseOver) {
+      this.props.onRowMouseOver(e.currentTarget.rowIndex, e);
+    }
+  }
+
+  render() {
+    this.clickNum = 0;
+    const trCss = {
+      style: {
+        backgroundColor: this.props.isSelected ? this.props.selectRow.bgColor : null
       },
-      className:(this.props.isSelected && this.props.selectRow.className ? this.props.selectRow.className : '') + (this.props.className||'')
+      className: (
+        this.props.isSelected && this.props.selectRow.className ?
+        this.props.selectRow.className : '') + (this.props.className || '')
     };
 
-    if(this.props.selectRow && !this.props.enableCellEdit &&
-      (this.props.selectRow.clickToSelect || this.props.selectRow.clickToSelectAndEditCell) || this.props.onRowClick){
-      return(
-        <tr {...trCss} onClick={this.rowClick.bind(this)}>{this.props.children}</tr>
-      )
-    }else{
-      return(
-        <tr {...trCss}>{this.props.children}</tr>
-      )
+    if (this.props.selectRow && (this.props.selectRow.clickToSelect ||
+      this.props.selectRow.clickToSelectAndEditCell) || this.props.onRowClick) {
+      return (
+        <tr { ...trCss }
+            onMouseOver={ this.rowMouseOver }
+            onMouseOut={ this.rowMouseOut }
+            onClick={ this.rowClick }>{ this.props.children }</tr>
+      );
+    } else {
+      return (
+        <tr { ...trCss }>{ this.props.children }</tr>
+      );
     }
   }
 }
 TableRow.propTypes = {
-  isSelected: React.PropTypes.bool,
-  enableCellEdit: React.PropTypes.bool,
-  onRowClick: React.PropTypes.func,
-  onSelectRow: React.PropTypes.func
+  isSelected: PropTypes.bool,
+  enableCellEdit: PropTypes.bool,
+  onRowClick: PropTypes.func,
+  onSelectRow: PropTypes.func,
+  onRowMouseOut: PropTypes.func,
+  onRowMouseOver: PropTypes.func
 };
 TableRow.defaultProps = {
   onRowClick: undefined
-}
+};
 export default TableRow;

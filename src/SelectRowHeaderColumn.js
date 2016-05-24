@@ -1,22 +1,16 @@
-import React from 'react';
-import classSet from 'classnames';
-import Const from './Const';
+import React, { Component, PropTypes } from 'react';
 
-class SelectRowHeaderColumn extends React.Component{
+class SelectRowHeaderColumn extends Component {
 
-  render(){
-    var thStyle = {
-      width: parseInt(this.props.width)?this.props.width:35
-    };
-
-    return(
-      <th style={thStyle}>
-        <div className="th-inner table-header-column">
-          {this.props.children}
-        </div>
+  render() {
+    return (
+      <th style={ { textAlign: 'center' } }>
+        { this.props.children }
       </th>
-    )
+    );
   }
 }
-
+SelectRowHeaderColumn.propTypes = {
+  children: PropTypes.node
+};
 export default SelectRowHeaderColumn;
